@@ -1,0 +1,8 @@
+{
+  "values": [
+    "minecraft:fall",
+    "minecraft:fly_into_wall",
+    "minecraft:starve",
+    "minecraft:outside_border"
+  ]
+}

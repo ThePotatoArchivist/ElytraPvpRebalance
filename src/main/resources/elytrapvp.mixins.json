@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "archives.tater.elytrapvp.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "KineticWeaponMixin",
+    "LivingEntityMixin",
+    "MaceItemMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+	}
+}

@@ -1,0 +1,6 @@
+{
+  "targets": "minecraft:elytra",
+  "components": {
+    "minecraft:max_damage": 5
+  }
+}
