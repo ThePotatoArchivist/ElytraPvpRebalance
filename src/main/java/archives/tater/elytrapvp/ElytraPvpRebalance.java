@@ -117,6 +117,16 @@ public class ElytraPvpRebalance implements ModInitializer {
 			player.displayClientMessage(Component.literal("Elytra durability refilled"), true);
 	}
 
+	public static void makeBreakable(Player player, ServerLevel serverLevel) {
+		if (!player.hasAttached(UNBREAKABLE_COOLDOWN) && EquipmentSlot.VALUES.stream().anyMatch(slot -> isGlider(player.getItemBySlot(slot)))) {
+			player.displayClientMessage(Component.literal("Elytra is now breakable"), true);
+			serverLevel.playSound(null, player, SoundEvents.ITEM_BREAK.value(), player.getSoundSource(), 1f, 1f);
+		}
+		player.setAttached(UNBREAKABLE_COOLDOWN, serverLevel.getGameRules().get(GLIDER_DURABILITY_COOLDOWN));
+		if (!player.hasAttached(REPAIR_COOLDOWN))
+			player.setAttached(REPAIR_COOLDOWN, serverLevel.getGameRules().get(GLIDER_INITIAL_REPAIR_COOLDOWN));
+	}
+
 	@Override
 	public void onInitialize() {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
@@ -124,14 +134,12 @@ public class ElytraPvpRebalance implements ModInitializer {
 		// Proceed with mild caution.
 
 		ServerLivingEntityEvents.AFTER_DAMAGE.register((entity, source, baseDamageTaken, damageTaken, blocked) -> {
-			if (blocked || source.is(NO_ELYTRA_DURABILITY) || !(entity instanceof Player player) || !(entity.level() instanceof ServerLevel serverLevel)) return;
-			if (!player.hasAttached(UNBREAKABLE_COOLDOWN) && EquipmentSlot.VALUES.stream().anyMatch(slot -> isGlider(player.getItemBySlot(slot)))) {
-				player.displayClientMessage(Component.literal("Elytra is now breakable"), true);
-				serverLevel.playSound(null, player, SoundEvents.ITEM_BREAK.value(), player.getSoundSource(), 1f, 1f);
+			if (blocked || source.is(NO_ELYTRA_DURABILITY) || !(entity.level() instanceof ServerLevel serverLevel)) return;
+			if (entity instanceof Player player) {
+				makeBreakable(player, serverLevel);
+				if (source.getEntity() instanceof Player player2)
+					makeBreakable(player2, serverLevel);
 			}
-			player.setAttached(UNBREAKABLE_COOLDOWN, serverLevel.getGameRules().get(GLIDER_DURABILITY_COOLDOWN));
-			if (!player.hasAttached(REPAIR_COOLDOWN))
-				player.setAttached(REPAIR_COOLDOWN, serverLevel.getGameRules().get(GLIDER_INITIAL_REPAIR_COOLDOWN));
 		});
 	}
 }

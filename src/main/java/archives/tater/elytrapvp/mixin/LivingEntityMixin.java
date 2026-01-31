@@ -2,7 +2,11 @@ package archives.tater.elytrapvp.mixin;
 
 import archives.tater.elytrapvp.ElytraPvpRebalance;
 
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,7 +22,7 @@ import net.minecraft.world.level.Level;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
 	@Shadow
-	protected InterpolationHandler interpolation;
+	protected int fallFlyTicks;
 
 	public LivingEntityMixin(EntityType<?> entityType, Level level) {
 		super(entityType, level);
@@ -39,5 +43,15 @@ public abstract class LivingEntityMixin extends Entity {
 	private void tickGliders(CallbackInfo ci) {
 		if (level() instanceof ServerLevel level)
 			ElytraPvpRebalance.tickElytra((LivingEntity) (Object) this, level);
+	}
+
+	@Definition(id = "fallFlyTicks", field = "Lnet/minecraft/world/entity/LivingEntity;fallFlyTicks:I")
+	@Expression("?.fallFlyTicks = 0")
+	@WrapOperation(
+			method = "tick",
+			at = @At("MIXINEXTRAS:EXPRESSION")
+	)
+	private void keepFallFlyTicks(LivingEntity instance, int value, Operation<Void> original) {
+		original.call(instance, fallFlyTicks % 20);
 	}
 }
