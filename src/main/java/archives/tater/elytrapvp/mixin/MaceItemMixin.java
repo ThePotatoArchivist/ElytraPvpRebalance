@@ -20,6 +20,6 @@ public class MaceItemMixin {
     )
     private void refillOnSmash(ItemStack itemStack, LivingEntity livingEntity, LivingEntity livingEntity2, CallbackInfo ci) {
         if (livingEntity2 instanceof Player player)
-            ElytraPvpRebalance.refillElytra(player, true);
+            ElytraPvpRebalance.refillElytra(player);
     }
 }

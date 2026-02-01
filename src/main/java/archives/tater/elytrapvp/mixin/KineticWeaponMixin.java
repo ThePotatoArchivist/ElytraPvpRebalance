@@ -22,7 +22,7 @@ public class KineticWeaponMixin {
     private boolean refillOnCharge(LivingEntity instance, EquipmentSlot equipmentSlot, Entity entity, float f, boolean damage, boolean knockback, boolean dismount, Operation<Boolean> original) {
         if (!original.call(instance, equipmentSlot, entity, f,damage, knockback, dismount)) return false;
         if (damage && knockback && dismount && instance instanceof Player player)
-            ElytraPvpRebalance.refillElytra(player, true);
+            ElytraPvpRebalance.refillElytra(player);
         return true;
     }
 }
