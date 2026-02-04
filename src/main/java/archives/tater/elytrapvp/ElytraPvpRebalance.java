@@ -67,6 +67,11 @@ public class ElytraPvpRebalance implements ModInitializer {
 			.minValue(0)
 			.buildAndRegister(id("max_glide_time"));
 
+	public static final GameRule<Integer> SPECIAL_HIT_REPAIR_TIME = GameRuleBuilder.forInteger(2 * 20)
+			.category(GameRuleCategory.PLAYER)
+			.minValue(0)
+			.buildAndRegister(id("special_hit_repair_time"));
+
 	public static final TagKey<DamageType> NO_ELYTRA_DURABILITY = TagKey.create(Registries.DAMAGE_TYPE, id("no_elytra_durability"));
 
 	private static boolean decrementOrRemove(AttachmentTarget target, AttachmentType<Integer> attachmentType) {
@@ -130,7 +135,7 @@ public class ElytraPvpRebalance implements ModInitializer {
 	public static void refillElytra(Player player) {
 		if (!(player.level() instanceof ServerLevel level)) return;
 		if (!player.hasAttached(GLIDE_TICKS)) return;
-		player.setAttached(GLIDE_TICKS, level.getGameRules().get(MAX_GLIDE_TIME));
+		player.setAttached(GLIDE_TICKS, min(player.getAttachedOrElse(GLIDE_TICKS, 0) + level.getGameRules().get(SPECIAL_HIT_REPAIR_TIME), level.getGameRules().get(MAX_GLIDE_TIME)));
 		displayElytraTime(player);
 	}
 
