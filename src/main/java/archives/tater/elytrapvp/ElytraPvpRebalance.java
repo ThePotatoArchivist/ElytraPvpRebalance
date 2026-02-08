@@ -146,8 +146,7 @@ public class ElytraPvpRebalance implements ModInitializer {
 		if (!player.hasAttached(GLIDE_TICKS))
 			player.setAttached(GLIDE_TICKS, serverLevel.getGameRules().get(MAX_GLIDE_TIME));
 		player.setAttached(UNBREAKABLE_COOLDOWN, serverLevel.getGameRules().get(GLIDER_DURABILITY_COOLDOWN));
-		if (!player.hasAttached(REPAIR_COOLDOWN))
-			player.setAttached(REPAIR_COOLDOWN, serverLevel.getGameRules().get(GLIDER_INITIAL_REPAIR_COOLDOWN));
+		player.setAttached(REPAIR_COOLDOWN, serverLevel.getGameRules().get(GLIDER_INITIAL_REPAIR_COOLDOWN));
 	}
 
 	@Override
