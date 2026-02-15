@@ -47,17 +47,17 @@ public class ElytraPvpRebalance implements ModInitializer {
 	public static final AttachmentType<Integer> REPAIR_COOLDOWN = AttachmentRegistry.createPersistent(id("repair_cooldown"), Codec.INT);
 	public static final AttachmentType<Integer> GLIDE_TICKS = AttachmentRegistry.createPersistent(id("glide_ticks"), Codec.INT);
 
-	public static final GameRule<Integer> GLIDER_DURABILITY_COOLDOWN = GameRuleBuilder.forInteger(3 * 60 * 20)
+	public static final GameRule<Integer> GLIDER_DURABILITY_COOLDOWN = GameRuleBuilder.forInteger(50 * 20)
 			.category(GameRuleCategory.PLAYER)
 			.minValue(0)
 			.buildAndRegister(id("glider_durability_cooldown"));
 
-	public static final GameRule<Integer> GLIDER_REPAIR_COOLDOWN = GameRuleBuilder.forInteger(45 * 20)
+	public static final GameRule<Integer> GLIDER_REPAIR_COOLDOWN = GameRuleBuilder.forInteger(5 * 20)
 			.category(GameRuleCategory.PLAYER)
 			.minValue(0)
 			.buildAndRegister(id("glider_repair_cooldown"));
 
-	public static final GameRule<Integer> GLIDER_INITIAL_REPAIR_COOLDOWN = GameRuleBuilder.forInteger(120 * 20)
+	public static final GameRule<Integer> GLIDER_INITIAL_REPAIR_COOLDOWN = GameRuleBuilder.forInteger(15 * 20)
 			.category(GameRuleCategory.PLAYER)
 			.minValue(0)
 			.buildAndRegister(id("glider_initial_repair_cooldown"));
@@ -67,7 +67,7 @@ public class ElytraPvpRebalance implements ModInitializer {
 			.minValue(0)
 			.buildAndRegister(id("max_glide_time"));
 
-	public static final GameRule<Integer> SPECIAL_HIT_REPAIR_TIME = GameRuleBuilder.forInteger(2 * 20)
+	public static final GameRule<Integer> SPECIAL_HIT_REPAIR_TIME = GameRuleBuilder.forInteger(20)
 			.category(GameRuleCategory.PLAYER)
 			.minValue(0)
 			.buildAndRegister(id("special_hit_repair_time"));
