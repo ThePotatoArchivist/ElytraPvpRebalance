@@ -108,7 +108,7 @@ public class ElytraPvpRebalance implements ModInitializer {
 
             var glideTicks = (int) entity.getAttachedOrElse(GLIDE_TICKS, 0);
 
-			if (player.isFallFlying() && glideTicks > 0) {
+			if (player.onGround() && glideTicks > 0) {
 				glideTicks--;
 			} else if (!decrementOrRemove(entity, REPAIR_COOLDOWN)) {
 				glideTicks = min(level.getGameRules().get(MAX_GLIDE_TIME), glideTicks + 20);
