@@ -101,6 +101,7 @@ public class ElytraPvpRebalance implements ModInitializer {
 		if (!decrementOrRemove(entity, UNBREAKABLE_COOLDOWN)) {
 			if (hadCooldown) {
 				level.playSound(null, player, SoundEvents.ARMOR_EQUIP_ELYTRA.value(), player.getSoundSource(), 1f, 1f);
+				player.displayClientMessage(Component.literal("Elytra duration no longer limited"), false);
 			}
 			entity.removeAttached(GLIDE_TICKS);
 			entity.removeAttached(REPAIR_COOLDOWN);
@@ -116,9 +117,6 @@ public class ElytraPvpRebalance implements ModInitializer {
 			}
 
 			entity.setAttached(GLIDE_TICKS, glideTicks);
-
-			if (hasGlider(player))
-				displayElytraTime(player, glideTicks);
 		}
     }
 
@@ -134,16 +132,17 @@ public class ElytraPvpRebalance implements ModInitializer {
 		if (!(player.level() instanceof ServerLevel level)) return;
 		if (!player.hasAttached(GLIDE_TICKS)) return;
 		player.setAttached(GLIDE_TICKS, min(player.getAttachedOrElse(GLIDE_TICKS, 0) + level.getGameRules().get(SPECIAL_HIT_REPAIR_TIME), level.getGameRules().get(MAX_GLIDE_TIME)));
-		displayElytraTime(player);
 	}
 
 	public static void makeBreakable(Player player, ServerLevel serverLevel) {
-		if (!player.hasAttached(UNBREAKABLE_COOLDOWN) && hasGlider(player)) {
-			serverLevel.playSound(null, player, SoundEvents.ITEM_BREAK.value(), player.getSoundSource(), 1f, 1f);
-		}
 		if (!player.hasAttached(GLIDE_TICKS))
 			player.setAttached(GLIDE_TICKS, serverLevel.getGameRules().get(MAX_GLIDE_TIME));
-		player.setAttached(UNBREAKABLE_COOLDOWN, serverLevel.getGameRules().get(GLIDER_DURABILITY_COOLDOWN));
+		var durabilityCooldown = serverLevel.getGameRules().get(GLIDER_DURABILITY_COOLDOWN);
+		if (!player.hasAttached(UNBREAKABLE_COOLDOWN)) {
+			serverLevel.playSound(null, player, SoundEvents.ITEM_BREAK.value(), player.getSoundSource(), 1f, 1f);
+			player.displayClientMessage(Component.literal("Elytra duration limited for " + durabilityCooldown / 20 + " seconds"), false);
+		}
+		player.setAttached(UNBREAKABLE_COOLDOWN, durabilityCooldown);
 		player.setAttached(REPAIR_COOLDOWN, serverLevel.getGameRules().get(GLIDER_INITIAL_REPAIR_COOLDOWN));
 	}
 
