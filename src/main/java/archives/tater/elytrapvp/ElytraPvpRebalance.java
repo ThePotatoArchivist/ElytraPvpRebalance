@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.attachment.v1.AttachmentTarget;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import net.fabricmc.fabric.api.entity.event.v1.EntityElytraEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleBuilder;
 
 import com.mojang.serialization.Codec;
@@ -164,5 +165,14 @@ public class ElytraPvpRebalance implements ModInitializer {
 		EntityElytraEvents.ALLOW.register(entity ->
 			!entity.hasAttached(GLIDE_TICKS) || requireNonNull(entity.getAttached(GLIDE_TICKS)) > 0
 		);
+
+		ServerPlayerEvents.LEAVE.register(player -> {
+			if (player.hasAttached(UNBREAKABLE_COOLDOWN))
+				player.level().getServer().getPlayerList().broadcastSystemMessage(
+						player.getDisplayName().copy()
+								.append(" disconnected with %.1fs glide time".formatted( player.getAttachedOrElse(GLIDE_TICKS, 0) / 20f)),
+						false
+				);
+		});
 	}
 }
