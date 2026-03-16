@@ -155,10 +155,9 @@ public class ElytraPvpRebalance implements ModInitializer {
 
 		ServerLivingEntityEvents.AFTER_DAMAGE.register((entity, source, baseDamageTaken, damageTaken, blocked) -> {
 			if (blocked || source.is(NO_ELYTRA_DURABILITY) || !(entity.level() instanceof ServerLevel serverLevel)) return;
-			if (entity instanceof Player player) {
+			if (entity instanceof Player player && source.getEntity() instanceof Player player2 && player != player2) {
 				makeBreakable(player, serverLevel);
-				if (source.getEntity() instanceof Player player2)
-					makeBreakable(player2, serverLevel);
+				makeBreakable(player2, serverLevel);
 			}
 		});
 
